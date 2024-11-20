@@ -22,9 +22,27 @@ app.post(`/events`, (req, res) => {
         }
 
         case "COMMENT_CREATED": {
-            const { id, content, postId } = data;
-            if (posts[postId]) {
-                posts[postId].comments.push({ id, content }); 
+            const { postId, ...rest } = data;
+            const post = posts[postId];
+            if (post) {
+                post?.comments?.push({ ...rest });
+            } else {
+                console.error(`Post with id ${postId} not found`);
+            }
+            break;
+        }
+
+        case "COMMENT_UPDATED": {
+            const { postId, id, ...rest } = data;
+            const post = posts[postId];
+            if (post) {
+                const comments = post?.comments || [];
+                const commentIndex = comments?.findIndex((item) => item?.id === id);
+                if (commentIndex !== -1) {
+                    comments[commentIndex] = { id, ...rest };
+                } else {
+                    console.error(`Comment with id ${id} not found`);
+                }
             } else {
                 console.error(`Post with id ${postId} not found`);
             }
