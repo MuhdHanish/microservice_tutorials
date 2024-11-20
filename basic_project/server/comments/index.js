@@ -26,24 +26,49 @@ app.post(`/posts/:id/comments`, async (req, res) => {
     const commentId = randomBytes(4).toString('hex');
     const comments = commentsByPostId[postId] || [];
     
-    comments.push({ id: commentId, content });
+    const commentData = { id: commentId, content, status: 'pending' };
+
+    comments.push(commentData);
     commentsByPostId[postId] = comments;
 
     await axios.post(`http://localhost:8080/events`, {
         type: 'COMMENT_CREATED',
         data: {
-            id: commentId,
             postId,
-            content
+            ...commentData
         }
     });
 
     res.status(201).json({ comments });
 });
 
-app.post(`/events`, (req, res) => {
-    console.log(`Received Event: ${req.body.type}`);
-    res.sendStatus(200);
+app.post(`/events`, async (req, res) => {
+    const { type, data } = req.body
+    switch (type) {
+        case "COMMENT_MODERATED": {
+            const { postId, id, status } = data;
+            const comments = commentsByPostId[postId] || [];
+            const comment = comments?.find((item) => item?.id === id);
+            if (comment) {
+                comment.status = status;
+                await axios.post(`http://localhost:8080/events`, {
+                    type: "COMMENT_UPDATED",
+                    data: {
+                        ...data,
+                    }
+                });
+            } else {
+                console.error(`Comment with id ${id} not found`)
+            }
+            break;
+        }
+
+        default: {
+            console.log(`Unhandled event type: ${type}`);
+            break;
+        }
+    }
+    res.json({ status: 'OK' });
 });
 
 app.listen(8002, () => {
