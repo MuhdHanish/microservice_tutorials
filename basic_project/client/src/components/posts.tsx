@@ -25,7 +25,7 @@ export const Posts = () => {
 
     const fetchPosts = useCallback(async () => {
         try {
-            const response = await axios.get(`http://localhost:8001/posts`);
+            const response = await axios.get(`http://localhost:8003/posts`);
             setPosts(Object.values(response?.data?.posts) || []);
         } catch (error) {
             console.error(error);
@@ -55,7 +55,7 @@ export const Posts = () => {
                         <div className="card" style={{ width: '30%', marginBottom: "20px" }} key={`${post?.id}-${index}`}>
                             <div className="card-body">
                                 <h3>{post?.title}</h3>
-                                <Comments postId={post?.id} />
+                                <Comments prevComments={post?.comments} postId={post?.id} />
                             </div>
                         </div>
                     ))
