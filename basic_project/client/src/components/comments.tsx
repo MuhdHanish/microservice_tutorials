@@ -1,13 +1,15 @@
 import axios from "axios";
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import { FormEvent, useCallback, useState } from "react";
 
 export const Comments = ({
-    postId
+    postId,
+    prevComments,
 }: {
-    postId: string
+    prevComments: any[];
+    postId: string;
 }) => {
     const [loading, setLoading] = useState(false);
-    const [comments, setComments] = useState<any[]>([]);
+    const [comments, setComments] = useState<any[]>([...prevComments]);
     const [comment, setComment] = useState("");
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -33,10 +35,6 @@ export const Comments = ({
         } catch (error) {
             console.error(error);
         }
-    }, []);
-
-    useEffect(() => {
-        fetchComments();
     }, []);
     return (
         <>
