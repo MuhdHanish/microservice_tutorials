@@ -17,30 +17,35 @@ app.get(`/posts/:id/comments`, (req, res) => {
 
 app.post(`/posts/:id/comments`, async (req, res) => {
     const postId = req.params.id;
-
     const { content } = req.body;
-    if (!content) {
-        return res.status(400).json({ message: "content is required." });
+
+    if (!content || typeof content !== "string" || content.trim() === "") {
+        return res.status(422).json({ message: "Content must be a non-empty string." });
     }
 
-    const commentId = randomBytes(4).toString('hex');
+    const commentId = randomBytes(4).toString("hex");
     const comments = commentsByPostId[postId] || [];
-    
-    const commentData = { id: commentId, content, status: 'pending' };
+
+    const commentData = { id: commentId, content, status: "pending" };
 
     comments.push(commentData);
     commentsByPostId[postId] = comments;
 
-    await axios.post(`http://localhost:8080/events`, {
-        type: 'COMMENT_CREATED',
-        data: {
-            postId,
-            ...commentData
-        }
-    });
+    try {
+        await axios.post(`http://localhost:8080/events`, {
+            type: "COMMENT_CREATED",
+            data: {
+                postId,
+                ...commentData,
+            },
+        });
+    } catch (error) {
+        console.error(`[ERROR] Failed to emit COMMENT_CREATED event: ${error.message}`);
+    }
 
     res.status(201).json({ comments });
 });
+
 
 app.post(`/events`, async (req, res) => {
     const { type, data } = req.body
@@ -58,13 +63,13 @@ app.post(`/events`, async (req, res) => {
                     }
                 });
             } else {
-                console.error(`Comment with id ${id} not found`)
+                console.error(`[ERROR] Comment with id ${id} not found`)
             }
             break;
         }
 
         default: {
-            console.log(`Unhandled event type: ${type}`);
+            console.log(`[INFO] Unhandled event type: ${type}`);
             break;
         }
     }

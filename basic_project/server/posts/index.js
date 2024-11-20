@@ -16,28 +16,29 @@ app.get(`/posts`, (req, res) => {
 
 app.post(`/posts`, async (req, res) => {
     const { title } = req.body;
-    if (!title) {
-        return res.status(400).json({ message: "title is required." });
-    }
-    const id = randomBytes(4).toString('hex');
-    posts[id] = {
-        id,
-        title
-    };
 
-    await axios.post(`http://localhost:8080/events`, {
-        type: 'POST_CREATED',
-        data: {
-            id,
-            title
-        }
-    });
+    if (!title || typeof title !== "string" || title.trim() === "") {
+        return res.status(422).json({ message: "Title must be a non-empty string." });
+    }
+
+    const id = randomBytes(4).toString("hex");
+    posts[id] = { id, title };
+
+    try {
+        await axios.post(`http://localhost:8080/events`, {
+            type: "POST_CREATED",
+            data: { id, title },
+        });
+    } catch (error) {
+        console.error(`[ERROR] Failed to emit POST_CREATED event: ${error.message}`);
+    }
 
     res.status(201).json({ id });
 });
 
+
 app.post(`/events`, (req, res) => {
-    console.log(`Received Event: ${req.body.type}`);
+    console.log(`[INFO] Received Event: ${req.body.type}`);
     res.sendStatus(200);
 });
 
