@@ -1,33 +1,66 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import axios from "axios";
+import { FormEvent, useCallback, useEffect, useState } from "react"
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [loading, setLoading] = useState(false);
+  const [posts, setPosts] = useState<any[]>([]);
+  const [title, setTitle] = useState("");
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!title) return;
+    try {
+      setLoading(true);
+      await axios.post(`http://localhost:8001/posts`, {
+        title
+      });
+      fetchPosts();
+      setTitle("");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
+  const fetchPosts = useCallback(async () => {
+    try {
+      const response = await axios.get(`http://localhost:8001/posts`);
+      setPosts(Object.values(response?.data?.posts) || []);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="container" style={{ marginTop: 10 }}>
+        <h1>Create Post</h1>
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 15 }}>
+          <div className="form-group" >
+            <label htmlFor="title">Title</label>
+            <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" className="form-control" id="title" placeholder="Enter title" />
+          </div>
+          <button disabled={loading} type="submit" className="btn btn-primary">
+            {loading ? "Submittng..." : "Submit"}
+          </button>
+        </form>
+        <hr />
+        <h1 style={{ marginBottom: 10 }}>Posts</h1>
+        <div className="d-flex flex-row flex-wrap gap-4">
+          {
+            posts?.map((post, index) => (
+              <div className="card" style={{ width: '30%', marginBottom: "20px" }} key={`${post?.id}-${index}`}>
+                <div className="card-body">
+                  <h3>{post?.title}</h3>
+                </div>
+              </div>
+            ))
+          }
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
