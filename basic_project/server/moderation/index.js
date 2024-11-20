@@ -5,10 +5,6 @@ const app = express();
 
 app.use(express.json());
 
-app.get(`/`, (req, res) => {
-    res.json({ });
-});
-
 app.post(`/events`, async (req, res) => {
     const { type, data } = req.body;
     switch (type) {
