@@ -41,8 +41,23 @@ export const Comments = ({
             <ul>
                 {
                     comments?.map((comment, index) => (
-                        <li className="text-muted" key={`${comment?.id}-${index}`}>
-                            {comment?.content}
+                        <li
+                            className="text-muted"
+                            style={{ fontStyle: comment?.status !== 'approved' ? 'italic' : '' }}
+                            key={`${comment?.id}-${index}`}
+                        >
+                            {(() => {
+                                switch (comment?.status) {
+                                    case 'pending':
+                                        return 'This comment is awaiting mederation.';
+
+                                    case 'rejected':
+                                        return 'This comment has been rejected.';
+                                        
+                                    default:
+                                        return comment?.content;
+                                }
+                            })()}
                         </li>
                     ))
                 }
