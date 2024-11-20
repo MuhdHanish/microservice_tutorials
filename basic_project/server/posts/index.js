@@ -8,7 +8,7 @@ app.use(express.json());
 const posts = {};
 
 app.get(`/posts`, (req, res) => {
-    res.send(posts);
+    res.json({ posts });
 });
 
 app.post(`/posts`, (req, res) => {
