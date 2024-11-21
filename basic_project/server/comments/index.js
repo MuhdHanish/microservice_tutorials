@@ -69,7 +69,7 @@ app.post(`/events`, async (req, res) => {
         }
 
         default: {
-            console.log(`[INFO] Unhandled event type: ${type}`);
+            console.warn(`[WARN] Unhandled event type: ${type}`);
             break;
         }
     }
