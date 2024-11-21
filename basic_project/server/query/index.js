@@ -72,6 +72,6 @@ app.listen(8003, async () => {
             handleEvent(event?.type, event?.data);
         });
     } catch (error) {
-        console.error(`[ERROR] Could not fetch events: ${error.message}`);
+        console.error(`[ERROR] Could not fetch events: ${error}`);
     }
 });
