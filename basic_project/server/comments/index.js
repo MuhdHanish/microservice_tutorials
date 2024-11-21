@@ -27,10 +27,8 @@ app.post(`/posts/:id/comments`, async (req, res) => {
     const comments = commentsByPostId[postId] || [];
 
     const commentData = { id: commentId, content, status: "pending" };
-
     comments.push(commentData);
     commentsByPostId[postId] = comments;
-
     try {
         await axios.post(`http://localhost:8080/events`, {
             type: "COMMENT_CREATED",
@@ -40,7 +38,7 @@ app.post(`/posts/:id/comments`, async (req, res) => {
             },
         });
     } catch (error) {
-        console.error(`[ERROR] Failed to emit COMMENT_CREATED event: ${error.message}`);
+        console.error(`[ERROR] Failed to emit COMMENT_CREATED event: ${error}`);
     }
 
     res.status(201).json({ comments });
@@ -56,12 +54,16 @@ app.post(`/events`, async (req, res) => {
             const comment = comments?.find((item) => item?.id === id);
             if (comment) {
                 comment.status = status;
-                await axios.post(`http://localhost:8080/events`, {
-                    type: "COMMENT_UPDATED",
-                    data: {
-                        ...data,
-                    }
-                });
+                try {
+                    await axios.post(`http://localhost:8080/events`, {
+                        type: "COMMENT_UPDATED",
+                        data: {
+                            ...data,
+                        }
+                    });
+                } catch (error) {
+                    console.error(`[ERROR] Failed to emit COMMENT_UPDATED event: ${error}`);
+                }
             } else {
                 console.error(`[ERROR] Comment with id ${id} not found`)
             }

@@ -18,14 +18,17 @@ app.post(`/events`, async (req, res) => {
             const prohibitedWords = ["stupid", "idiot", "dumb", "fool", "nonsense", "moron"];
             const content = data?.content?.toLowerCase();
             const status = prohibitedWords.some((word) => content?.includes(word)) ? "rejected" : "approved";
-
-            await axios.post(`http://localhost:8080/events`, {
-                type: "COMMENT_MODERATED",
-                data: {
-                    ...data,
-                    status,
-                },
-            });
+            try {
+                await axios.post(`http://localhost:8080/events`, {
+                    type: "COMMENT_MODERATED",
+                    data: {
+                        ...data,
+                        status,
+                    },
+                });
+            } catch (error) {
+                console.error(`[ERROR] Failed to emit COMMENT_MODERATED event: ${error}`);
+            }
             break;
         }
         default: {
