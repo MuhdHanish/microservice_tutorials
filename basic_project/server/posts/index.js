@@ -36,7 +36,6 @@ app.post(`/posts`, async (req, res) => {
     res.status(201).json({ id });
 });
 
-
 app.post(`/events`, (req, res) => {
     console.log(`[INFO] Received Event: ${req.body.type}`);
     res.sendStatus(200);
