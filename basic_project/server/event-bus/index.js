@@ -11,7 +11,7 @@ const services = [
     { name: "POST", url: "http://posts-clusterip-srv:8001/events" },
     { name: "COMMENT", url: "http://comments-srv:8002/events" },
     { name: "QUERY", url: "http://query-srv:8003/events" },
-    { name: "COMMENT_MODERATION", url: "http://moderation-srv:8004/events" },
+    { name: "MODERATION", url: "http://moderation-srv:8004/events" },
 ];
 
 app.post(`/events`, async (req, res) => {
