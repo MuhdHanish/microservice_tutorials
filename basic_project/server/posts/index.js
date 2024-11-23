@@ -43,6 +43,5 @@ app.post(`/events`, (req, res) => {
 });
 
 app.listen(8001, () => {
-    console.log(`v5`);
     console.log(`Posts service listening on port 8001`)
 });
