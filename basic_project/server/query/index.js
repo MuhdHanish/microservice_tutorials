@@ -65,7 +65,7 @@ app.post(`/events`, (req, res) => {
 app.listen(8003, async () => {
     console.log(`Query service listening on port 8003`);
     try {
-        const response = await axios.get(`http://localhost:8080/events`);
+        const response = await axios.get(`http://event-bus-srv:8080/events`);
         const data = response?.data?.events || [];
         data.forEach((event) => {
             console.log(`[INFO] Processing event: ${event?.type}`);

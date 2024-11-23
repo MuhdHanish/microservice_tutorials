@@ -19,7 +19,7 @@ app.post(`/events`, async (req, res) => {
             const content = data?.content?.toLowerCase();
             const status = prohibitedWords.some((word) => content?.includes(word)) ? "rejected" : "approved";
             try {
-                await axios.post(`http://localhost:8080/events`, {
+                await axios.post(`http://event-bus-srv:8080/events`, {
                     type: "COMMENT_MODERATED",
                     data: {
                         ...data,

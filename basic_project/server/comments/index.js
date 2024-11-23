@@ -30,7 +30,7 @@ app.post(`/posts/:id/comments`, async (req, res) => {
     comments.push(commentData);
     commentsByPostId[postId] = comments;
     try {
-        await axios.post(`http://localhost:8080/events`, {
+        await axios.post(`http://event-bus-srv:8080/events`, {
             type: "COMMENT_CREATED",
             data: {
                 postId,
@@ -55,7 +55,7 @@ app.post(`/events`, async (req, res) => {
             if (comment) {
                 comment.status = status;
                 try {
-                    await axios.post(`http://localhost:8080/events`, {
+                    await axios.post(`http://event-bus-srv:8080/events`, {
                         type: "COMMENT_UPDATED",
                         data: {
                             ...data,
