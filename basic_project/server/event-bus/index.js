@@ -8,10 +8,10 @@ app.use(express.json());
 const events = []; 
 
 const services = [
-    { name: "POST", url: "http://localhost:8001/events" },
-    { name: "COMMENT", url: "http://localhost:8002/events" },
-    { name: "QUERY", url: "http://localhost:8003/events" },
-    { name: "COMMENT_MODERATION", url: "http://localhost:8004/events" },
+    { name: "POST", url: "http://posts-clusterip-srv:8001/events" },
+    // { name: "COMMENT", url: "http://localhost:8002/events" },
+    // { name: "QUERY", url: "http://localhost:8003/events" },
+    // { name: "COMMENT_MODERATION", url: "http://localhost:8004/events" },
 ];
 
 app.post(`/events`, async (req, res) => {
