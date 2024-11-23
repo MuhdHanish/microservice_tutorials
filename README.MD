@@ -29,7 +29,7 @@ These aliases make managing Kubernetes resources faster and easier:
 ### **How to Use These Aliases**
 To use these aliases, add the provided list to your shell configuration file (e.g., `.bashrc`, `.zshrc`, or `.bash_profile`) and reload the terminal:
 ```bash
-source ~/.bashrc  # or source ~/.zshrc
+source source ~/.zshrc # or ~/.bashrc, ~/.bash_profile 
 ```
 
 Now, you can use these commands directly in the terminal to speed up Docker and Kubernetes workflows.
