@@ -27,9 +27,25 @@ These aliases make managing Kubernetes resources faster and easier:
 - **`klogs`**: Fetches logs from a specific pod (`kubectl logs`).
 
 ### **How to Use These Aliases**
-To use these aliases, add the provided list to your shell configuration file (e.g., `.bashrc`, `.zshrc`, or `.bash_profile`) and reload the terminal:
-```bash
-code ~/.zshrc # or ~/.bashrc, ~/.bash_profile 
-```
+
+To use these aliases, follow these steps:
+
+1. Open your shell configuration file (e.g., `.bashrc`, `.zshrc`, or `.bash_profile`) using an editor of your choice. If you're using VS Code, you can run:
+
+   ```bash
+   code ~/.zshrc  # For Zsh shell users
+   code ~/.bashrc  # For Bash shell users
+   code ~/.bash_profile  # If you're using Bash with a profile file
+   ```
+
+2. Copy and paste the alias list provided in this README into the file.
+
+3. Save the changes and reload your terminal session by running:
+
+   ```bash
+   source ~/.zshrc  # For Zsh shell
+   source ~/.bashrc  # For Bash shell
+   source ~/.bash_profile  # For Bash with profile
+   ```
 
 Now, you can use these commands directly in the terminal to speed up Docker and Kubernetes workflows.
