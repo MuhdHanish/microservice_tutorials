@@ -16,7 +16,7 @@ export const Comments = ({
         if (!comment) return;
         try {
             setLoading(true);
-            await axios.post(`http://localhost:8002/posts/${postId}/comments`, {
+            await axios.post(`http://post.com/posts/${postId}/comments`, {
                 content: comment
             });
             fetchComments();
