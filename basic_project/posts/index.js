@@ -14,7 +14,7 @@ app.get(`/posts`, (req, res) => {
     res.json({ posts });
 });
 
-app.post(`/posts`, async (req, res) => {
+app.post(`/posts/create`, async (req, res) => {
     const { title } = req.body;
 
     if (!title || typeof title !== "string" || title.trim() === "") {

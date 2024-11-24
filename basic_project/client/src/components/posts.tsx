@@ -11,7 +11,7 @@ export const Posts = () => {
         if (!title) return;
         try {
             setLoading(true);
-            await axios.post(`http://post.com/posts`, {
+            await axios.post(`http://post.com/posts/create`, {
                 title
             });
             fetchPosts();
