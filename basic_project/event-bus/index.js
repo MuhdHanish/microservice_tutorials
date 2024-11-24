@@ -42,5 +42,5 @@ app.get(`/events`, (req, res) => {
 })
 
 app.listen(8080, () => {
-    console.log(`Event but listing on port 8080`);
+    console.log(`Event bus service listening on port 8080`);
 });
