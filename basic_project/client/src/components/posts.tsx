@@ -52,7 +52,7 @@ export const Posts = () => {
             <div className="d-flex flex-row flex-wrap gap-4">
                 {
                     posts?.map((post, index) => (
-                        <div className="card" style={{ width: '30%', marginBottom: "20px" }} key={`${post?.id}-${index}`}>
+                        <div className="card col-12 col-lg-4" style={{ marginBottom: "20px" }} key={`${post?.id}-${index}`}>
                             <div className="card-body">
                                 <h3>{post?.title}</h3>
                                 <Comments prevComments={post?.comments} postId={post?.id} />
