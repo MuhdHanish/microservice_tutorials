@@ -11,7 +11,7 @@ export const Posts = () => {
         if (!title) return;
         try {
             setLoading(true);
-            await axios.post(`http://post.com/posts/create`, {
+            await axios.post(`http://posts.com/posts/create`, {
                 title
             });
             fetchPosts();
@@ -25,7 +25,7 @@ export const Posts = () => {
 
     const fetchPosts = useCallback(async () => {
         try {
-            const response = await axios.get(`http://post.com/posts`);
+            const response = await axios.get(`http://posts.com/posts`);
             setPosts(Object.values(response?.data?.posts) || []);
         } catch (error) {
             console.error(error);
