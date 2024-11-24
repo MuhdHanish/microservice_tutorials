@@ -16,7 +16,7 @@ export const Comments = ({
         if (!comment) return;
         try {
             setLoading(true);
-            await axios.post(`http://post.com/posts/${postId}/comments`, {
+            await axios.post(`http://post.com/posts/${postId}/comments/create`, {
                 content: comment
             });
             fetchComments();
@@ -30,7 +30,7 @@ export const Comments = ({
 
     const fetchComments = useCallback(async () => {
         try {
-            const response = await axios.get(`http://localhost:8002/posts/${postId}/comments`);
+            const response = await axios.get(`http://post.com/posts/${postId}/comments`);
             setComments(Object.values(response?.data?.comments) || []);
         } catch (error) {
             console.error(error);
