@@ -48,6 +48,13 @@ const handleExit = async (signal: NodeJS.Signals) => {
 };
 
 const startServer = async () => {
+    const keys = ['JWT_SECRET'];
+    for (const key of keys) {
+        if (!process.env[key]) {
+            throw new Error(`Missing environment variable ${key}`);
+        }
+    }
+
     await connectDB();
 
     app.listen(8001, () => {
