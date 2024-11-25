@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response, Router } from "express";
+import { User } from "../models";
 import { CustomHTTPError } from "../lib/utils";
 import { validationHandler } from "../middlewares";
 import { validateEmailPassword } from "../lib/validations";
-import { User } from "../models";
+import { NextFunction, Request, Response, Router } from "express";
 
 const router = Router();
 
