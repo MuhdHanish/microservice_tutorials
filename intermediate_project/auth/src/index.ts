@@ -2,12 +2,19 @@ import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
 import { authRouter } from "./routes";
+import cookieSession from "cookie-session";
 import { errorHandler } from "./middlewares";
 import { CustomHTTPError } from "./lib/utils";
 
 const app = express();
 
+app.set("trust proxy", true);
+
 app.use(express.json());
+app.use(cookieSession({
+    signed: false,
+    secure: true
+}));
 
 app.use("/api/auth", authRouter);
 
