@@ -1,12 +1,11 @@
 import express from "express";
+import { authRouter } from "./routes";
 
 const app = express();
 
 app.use(express.json());
 
-app.get("/api/auth", (req, res) => {
-    res.send("Hello from auth service");
-});
+app.use("/api/auth", authRouter);
 
 app.listen(8001, () => {
     console.log("Auth service listening on port 8001");
