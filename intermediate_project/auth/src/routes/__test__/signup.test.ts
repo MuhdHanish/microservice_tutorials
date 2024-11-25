@@ -74,7 +74,6 @@ describe("signup", () => {
                 password: "Jhone@123",
             })
             .expect(201);
-        console.log(process.env.NODE_ENV);
         expect(response.get("Set-Cookie")).toBeDefined();
     });
 })
