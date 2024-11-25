@@ -3,7 +3,7 @@ export class CustomHTTPError extends Error {
 
     constructor(message: string, status: number) {
         super(message);
-        this.name = 'CustomError';
+        this.name = 'CustomHTTPError';
         this.status = status;
     }
 };
