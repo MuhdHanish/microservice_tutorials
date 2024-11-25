@@ -1,28 +1,6 @@
 import "dotenv/config";
-import express from "express";
+import { app } from "./app";
 import mongoose from "mongoose";
-import { authRouter } from "./routes";
-import cookieSession from "cookie-session";
-import { errorHandler } from "./middlewares";
-import { CustomHTTPError } from "./lib/utils";
-
-const app = express();
-
-app.set("trust proxy", true);
-
-app.use(express.json());
-app.use(cookieSession({
-    signed: false,
-    secure: process.env.NODE_ENV !== "Development",
-}));
-
-app.use("/api/auth", authRouter);
-
-app.use("*", (req, res, next) => {
-    errorHandler(new CustomHTTPError("Resource not found.", 404), req, res, next);
-});
-
-app.use(errorHandler);
 
 const connectDB = async () => {
     try {
