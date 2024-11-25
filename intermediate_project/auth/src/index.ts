@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
+app.get("/api/auth", (req, res) => {
     res.send("Hello from auth service");
 });
 
