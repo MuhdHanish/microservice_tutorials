@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import { User } from "../models";
 import { CustomHTTPError } from "../lib/utils";
 import { validationHandler } from "../middlewares";
@@ -22,6 +23,15 @@ router.post("/signup",
 
         const user = User.build({ email, password });
         await user.save();
+
+        const token = jwt.sign({
+            id: user.id,
+            email: user.email,
+        }, process.env.JWT_SECRET!);
+
+        req.session = {
+            token,
+        };
 
         res.status(201).send({ user });
     } catch (error: any) {

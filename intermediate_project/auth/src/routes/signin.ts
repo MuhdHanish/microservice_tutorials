@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import { User } from "../models";
 import { CustomHTTPError } from "../lib/utils";
 import { validationHandler } from "../middlewares";
@@ -19,6 +20,15 @@ router.post("/signin",
             if (!user || !await user.comparePassword(password)) {
                 throw new CustomHTTPError("Credentials are not valid.", 401);
             }
+
+            const token = jwt.sign({
+                id: user.id,
+                email: user.email,
+            }, process.env.JWT_SECRET!);
+
+            req.session = {
+                token,
+            };
 
             res.send({ user });
         } catch (error: any) {
