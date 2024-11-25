@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
 import { authRouter } from "./routes";
@@ -18,7 +19,8 @@ app.use(errorHandler);
 
 const connectDB = async () => {
     try {
-        await mongoose.connect(`mongodb://auth-mongo-srv:27017/auth`);
+        const URI = process.env.NODE_ENV === "Development" ? "mongodb://localhost:27017/auth" : "mongodb://auth-mongo-srv:27017/auth";
+        await mongoose.connect(URI);
         console.log("Database connected successfully");
     } catch (error) {
         console.error("Database connection error:", error);
