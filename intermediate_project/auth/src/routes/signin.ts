@@ -1,12 +1,12 @@
 import { Request, Response, Router } from "express";
 import { CustomHTTPError } from "../lib/utils";
-import { validationMiddleware } from "../middlewares";
+import { validationHandler } from "../middlewares";
 import { validateEmailPassword } from "../lib/validations";
 
 const router = Router();
 
 router.post("/signin",
-    validationMiddleware(validateEmailPassword),
+    validationHandler(validateEmailPassword),
     (req: Request, res: Response) => {
         try {
             const { email, password } = req.body;

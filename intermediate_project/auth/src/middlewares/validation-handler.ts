@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { validationResult } from 'express-validator';
 
-export const validationMiddleware = (validationRules: any[]) => {
+export const validationHandler = (validationRules: any[]) => {
     return [
         ...validationRules,
         (req: Request, res: Response, next: NextFunction) => {
