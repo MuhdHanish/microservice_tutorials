@@ -4,7 +4,10 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
     try {
-        const URI = process.env.NODE_ENV === "Development" ? "mongodb://localhost:27017/auth" : "mongodb://auth-mongo-srv:27017/auth";
+        const URI =
+            ["development", "test"]?.includes(process.env.NODE_ENV || "") ?
+                "mongodb://localhost:27017/auth" : 
+                "mongodb://auth-mongo-srv:27017/auth";
         await mongoose.connect(URI);
         console.log("Database connected successfully");
     } catch (error) {
