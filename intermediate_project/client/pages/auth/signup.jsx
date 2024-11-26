@@ -1,12 +1,13 @@
 import { useState } from "react";
 import Router from "next/router";
+import Link from "next/link"
 import { useRequest } from "../../hooks";
 
 export default function Signup() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const API_URL = ["development", "test"]?.includes(process.env.NEXT_PUBLIC_NODE_ENV || "") ? "http://localhost:8001/api/auth/signup" : "/api/auth/signup";
+    const API_URL ="/api/auth/signup";
     const { loading, error, makeRequest } = useRequest(API_URL, "post", { email, password }, { headers: { "Content-Type": "application/json" } });
 
     const handleSubmit = async (e) => {
@@ -48,7 +49,7 @@ export default function Signup() {
                 </div>
                 {error && <p className="text-danger">{error}</p>}
                 <button disabled={loading} type="submit" className="btn btn-primary">Submit</button>
-                <p className="text-center">Already have an account? <a href="/auth/signin">Signin</a></p>
+                <p className="text-center">Already have an account? <Link href="/auth/signin">Signin</Link></p>
             </form>
         </div>
     );
