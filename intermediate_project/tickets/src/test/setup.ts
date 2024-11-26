@@ -5,14 +5,15 @@ config({ path: path.resolve(__dirname, "../../.env.test.local") });
 
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
+
 declare global {
     namespace NodeJS {
         interface Global {
-            signup(): Promise<string[]>;
+            authenticate(): string[];
         }
     }
 }
-
 let mongo: MongoMemoryServer;
 
 beforeAll(async () => {
@@ -29,3 +30,17 @@ afterAll(async () => {
     if (mongo) await mongo.stop();
     await mongoose.connection.close();
 });
+
+(global as any).authenticate = () => {
+    const id = new mongoose.Types.ObjectId().toHexString();
+    const email = "jhondoe@example.com";
+    const token = jwt.sign({
+        id,
+        email,
+    }, process.env.JWT_SECRET!);
+    const session = { token };
+    const sessionJSON = JSON.stringify(session);
+    const base64 = Buffer.from(sessionJSON).toString("base64");
+    const cookie = [`session=${base64}=;path=/;httponly`];
+    return cookie;
+};
