@@ -46,12 +46,15 @@ it("returns an error if an invalid price is provided", async () => {
 
 it("creates a ticket with valid inputs", async () => {
     const cookie = (global as any).authenticate();
-    await request(app)
+    const response = await request(app)
         .post("/api/tickets")
         .set("Cookie", cookie)
         .send({
             title: "test",
             price: 10,
-        })
-        .expect(201);
+        });
+    expect(response.status).toBe(201);
+    expect(response.body.ticket).toBeDefined();
+    expect(response.body.ticket.title).toBe("test");
+    expect(response.body.ticket.price).toBe(10);
 });
