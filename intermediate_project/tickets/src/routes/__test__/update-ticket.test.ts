@@ -74,7 +74,26 @@ describe("update ticket", () => {
         expect(response.status).toBe(404);
     });
 
-    it("updates the ticket with valid inputs", async () => {
+    it("returns an 403 if the user does not own the ticket", async () => {
+        const cookie = (global as any).authenticate();
+        const createResponse = await request(app)
+            .post("/api/tickets")
+            .set("Cookie", cookie)
+            .send({
+                title: "test",
+                price: 10,
+            });
+        const response = await request(app)
+            .put(`/api/tickets/${createResponse.body.ticket.id}`)
+            .set("Cookie", (global as any).authenticate())
+            .send({
+                title: "test",  
+                price: 10,
+            });
+        expect(response.status).toBe(403);
+    });
+
+    it("updates the ticket with valid inputs and user owns the ticket", async () => {
         const cookie = (global as any).authenticate();
         const createResponse = await request(app)
             .post("/api/tickets")
