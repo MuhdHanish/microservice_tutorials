@@ -15,3 +15,8 @@ export const validParamId = [
         .isMongoId()
         .withMessage('Invalid ticket id')
 ];
+
+export const validateUpdateTicket = [
+    ...validParamId,
+    ...validateCreateTicket
+];
