@@ -3,8 +3,8 @@ import { User } from "../models";
 import {
     CustomHTTPError,
     validationHandler,
-    validateEmailPassword
 } from "@hanishdev-ticketing/common";
+import { validateEmailPassword } from "../lib";
 import { NextFunction, Request, Response, Router } from "express";
 
 const router = Router();
