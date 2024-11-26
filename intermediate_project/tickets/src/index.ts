@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
     try {
-        const URI = "mongodb://tickets-mongo-srv:27017/tickets";
+        const URI = process.env.MONGO_URI!;
         await mongoose.connect(URI);
         console.log("Database connected successfully");
     } catch (error) {
@@ -26,7 +26,7 @@ const handleExit = async (signal: NodeJS.Signals) => {
 };
 
 const startServer = async () => {
-    const keys = ['JWT_SECRET'];
+    const keys = ['MONGO_URI','JWT_SECRET'];
     for (const key of keys) {
         if (!process.env[key]) {
             throw new Error(`Missing environment variable ${key}`);
