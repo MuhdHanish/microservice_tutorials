@@ -14,14 +14,11 @@ beforeAll(async () => {
     await mongoose.connect(URI);
 });
 
-beforeEach(async () => {
+afterAll(async () => {
     const collections = await mongoose.connection.db?.collections() || [];
     for (const collection of collections) {
-        await collection.deleteMany({});
+        await collection.drop();
     }
-});
-
-afterAll(async () => {
     if (mongo) await mongo.stop();
     await mongoose.connection.close();
 });
