@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Router from "next/router";
 import { useRequest } from "../../hooks";
 
 export default function Signin() {
@@ -10,7 +11,9 @@ export default function Signin() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await makeRequest();
+        await makeRequest(() => {
+            Router.push("/");
+        });
     }
     return (
         <div className="container d-flex justify-content-center align-items-center vh-100">
