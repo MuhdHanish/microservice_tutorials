@@ -1,29 +1,16 @@
 import { useState } from "react";
-import axios from "axios";
+import { useRequest } from "../../hooks";
 
 export default function Signup() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+
+    const API_URL = ["development", "test"]?.includes(process.env.NEXT_PUBLIC_NODE_ENV || "") ? "http://localhost:8001/api/auth/signup" : "/api/auth/signup";
+    const { loading, error, makeRequest } = useRequest(API_URL, "post", { email, password }, { headers: { "Content-Type": "application/json" } });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const API_URL = ["development", "test"]?.includes(process.env.NEXT_PUBLIC_NODE_ENV || "") ? "http://localhost:8001/api/auth/signup" : "/api/auth/signup";
-        try {
-            if (!email || !password) return;
-            setError('');
-            setLoading(true);
-            await axios.post(API_URL, {
-                email,
-                password
-            });
-        } catch (error) {
-            if (error.status === 400) setError(error?.response?.data?.message);
-            else console.error(error?.message);
-        } finally {
-            setLoading(false);
-        }
+        await makeRequest();
     }
     return (
         <div className="container d-flex justify-content-center align-items-center vh-100">
