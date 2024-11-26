@@ -49,24 +49,7 @@ describe("signin", () => {
             .expect(401);
     });
 
-    it("returns a 200 on successful signin", async () => {
-        await request(app)
-            .post("/api/auth/signup")
-            .send({
-                email: "jhondoe@example.com",
-                password: "Jhone@123",
-            })
-            .expect(201);
-        await request(app)
-            .post("/api/auth/signin")
-            .send({
-                email: "jhondoe@example.com",
-                password: "Jhone@123",
-            })
-            .expect(200);
-    });
-
-    it("sets a cookie after successful signin", async () => {
+    it("return a 200 and sets a cookie after successful signin", async () => {
         await request(app)
             .post("/api/auth/signup")
             .send({
@@ -79,8 +62,8 @@ describe("signin", () => {
             .send({
                 email: "jhondoe@example.com",
                 password: "Jhone@123",
-            })
-            .expect(200);
+            });
+        expect(response.status).toBe(200);
         expect(response.get("Set-Cookie")).toBeDefined();
     });
 });
