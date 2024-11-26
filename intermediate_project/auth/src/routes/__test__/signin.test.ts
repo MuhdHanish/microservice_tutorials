@@ -50,13 +50,7 @@ describe("signin", () => {
     });
 
     it("return a 200 and sets a cookie after successful signin", async () => {
-        await request(app)
-            .post("/api/auth/signup")
-            .send({
-                email: "jhondoe@example.com",
-                password: "Jhone@123",
-            })
-            .expect(201);
+        await (global as any).signup();
         const response = await request(app)
             .post("/api/auth/signin")
             .send({

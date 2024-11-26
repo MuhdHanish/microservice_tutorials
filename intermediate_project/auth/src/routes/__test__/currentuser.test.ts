@@ -11,14 +11,7 @@ describe("currentuser", () => {
     });
     
     it("return a 200 and user if token is provided and valid", async () => {
-        const signupResponse = await request(app)
-            .post("/api/auth/signup")
-            .send({
-                email: "jhondoe@example.com",
-                password: "Jhone@123",
-            })
-            .expect(201);
-        const cookie = signupResponse.get("Set-Cookie") as string[];
+        const cookie = await (global as any).signup() as string[];
         expect(cookie).toBeDefined();
         const response = await request(app)
             .get("/api/auth/currentuser")
