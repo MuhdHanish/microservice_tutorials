@@ -7,7 +7,7 @@ describe("currentuser", () => {
             .get("/api/auth/currentuser")
             .send({});
         const status = response.status;
-        expect([401, 403].includes(status)).toBe(true);
+        expect([401, 403]?.includes(status)).toBe(true);
     });
     
     it("return a 200 and user if token is provided and valid", async () => {
