@@ -1,8 +1,10 @@
 import jwt from "jsonwebtoken";
 import { User } from "../models";
-import { CustomHTTPError } from "../lib/utils";
-import { validationHandler } from "../middlewares";
-import { validateEmailPassword } from "../lib/validations";
+import {
+    CustomHTTPError,
+    validationHandler,
+    validateEmailPassword
+} from "@hanishdev-ticketing/common";
 import { NextFunction, Request, Response, Router } from "express";
 
 const router = Router();

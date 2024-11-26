@@ -1,4 +1,4 @@
-import { authHandler } from "../middlewares";
+import { authHandler } from "@hanishdev-ticketing/common";
 import { NextFunction, Request, Response, Router } from "express";
 
 const router = Router();

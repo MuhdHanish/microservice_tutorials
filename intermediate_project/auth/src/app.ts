@@ -1,8 +1,10 @@
 import express from "express";
 import { authRouter } from "./routes";
 import cookieSession from "cookie-session";
-import { errorHandler } from "./middlewares";
-import { CustomHTTPError } from "./lib/utils";
+import {
+    CustomHTTPError,
+    errorHandler
+} from "@hanishdev-ticketing/common";
 
 const app = express();
 
