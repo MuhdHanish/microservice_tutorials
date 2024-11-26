@@ -1,21 +1,12 @@
-import axios from "axios";
 import Link from "next/link";
 import { useRequest } from "../hooks";
+import { axiosInstace } from "../lib/api/config";
 
-Home.getInitialProps = async ({ req }) => {
+Home.getInitialProps = async (context) => {
     try {
-        const isServer = typeof window === "undefined";
-        if (isServer) {
-            const { data } = await axios.get("http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/auth/currentuser", {
-                headers: req.headers,
-            });
-            return data;
-        } else {
-            const { data } = await axios.get("/api/auth/currentuser");
-            return data;
-        }
+        const { data } = await axiosInstace(context).get("/api/auth/currentuser");
+        return data;
     } catch (error) {
-        console.log(error)
         return { user: null };
     }
 };
