@@ -39,41 +39,24 @@ describe("signup", () => {
             .expect(400);
     });
 
-    it("returns a 201 on successful signup", async () => {
+    it("return a 201 status and set a cookie on successful signup", async () => {
+        const response = await request(app)
+            .post("/api/auth/signup")
+            .send({
+                email: "jhondoe@example.com",
+                password: "Jhone@123",
+            });
+        expect(response.status).toBe(201);
+        expect(response.get("Set-Cookie")).toBeDefined();
+    });
+
+    it("returns a 409 with an existing email", async () => {
         return request(app)
             .post("/api/auth/signup")
             .send({
                 email: "jhondoe@example.com",
                 password: "Jhone@123",
             })
-            .expect(201);
-    });
-
-    it("returns a 409 with an existing email", async () => {
-        await request(app)
-            .post("/api/auth/signup")
-            .send({
-                email: "jhondoe@example.com",
-                password: "Jhone@123",
-            })
-            .expect(201);
-        await request(app)
-            .post("/api/auth/signup")
-            .send({
-                email: "jhondoe@example.com",
-                password: "Jhone@123",
-            })
             .expect(409);
-    });
-
-    it("sets a cookie after successful signup", async () => {
-        const response = await request(app)
-            .post("/api/auth/signup")
-            .send({
-                email: "jhondoe@example.com",
-                password: "Jhone@123",
-            })
-            .expect(201);
-        expect(response.get("Set-Cookie")).toBeDefined();
     });
 })
