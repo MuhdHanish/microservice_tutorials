@@ -4,6 +4,7 @@ import {
 } from "@hanishdev-ticketing/common";
 import { validateCreateTicket } from "../lib";
 import { NextFunction, Request, Response, Router } from "express";
+import { Ticket } from "../models";
 
 const router = Router();
 
@@ -15,7 +16,9 @@ router.post("/",
             if (!title || !price) {
                 throw new CustomHTTPError("Title and price are required.", 400);
             }
-            res.status(201).send({});
+            const ticket = Ticket.build({ title, price, user: req.user!.id });
+            await ticket.save();
+            res.status(201).send({ ticket});
         } catch (error: any) {
             next(error);
         }
