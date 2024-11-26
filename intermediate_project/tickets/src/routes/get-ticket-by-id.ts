@@ -1,10 +1,10 @@
+import { Ticket } from "../models";
 import {
     CustomHTTPError,
     validationHandler,
 } from "@hanishdev-ticketing/common";
 import { validParamId } from "../lib";
 import { NextFunction, Request, Response, Router } from "express";
-import { Ticket } from "../models";
 
 const router = Router();
 
