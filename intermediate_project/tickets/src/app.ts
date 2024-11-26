@@ -17,7 +17,6 @@ app.use(cookieSession({
     secure: process.env.NODE_ENV !== "test",
 }));
 
-
 app.use("/api/tickets", authHandler, tickerRouter);
 
 app.use("*", (req, res, next) => {
