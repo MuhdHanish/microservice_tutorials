@@ -16,15 +16,25 @@ router.put("/:id",
             if (!id) { 
                 throw new CustomHTTPError("ID is required.", 400);
             }
+
             const { title, price } = req.body;
             if (!title || !price) {
                 throw new CustomHTTPError("Title and price are required.", 400);
             }
-            const ticket = await Ticket.findByIdAndUpdate(id, { title, price }, { new: true });
-            if (!ticket) {
+
+            const existingTicket = await Ticket.findById(id);
+            if (!existingTicket) {
                 throw new CustomHTTPError("Ticket not found with provided ID.", 404);
             }
-            res.status(200).send({ ticket });
+
+            if (existingTicket.user !== req.user!.id) {
+                throw new CustomHTTPError("User doesn't have access to update this ticket.", 403);
+            }
+
+            existingTicket.set({ title, price });
+            await existingTicket.save();
+
+            res.status(200).send({ ticket: existingTicket });
         } catch (error: any) {
             next(error);
         }
