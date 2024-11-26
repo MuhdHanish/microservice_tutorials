@@ -1,3 +1,4 @@
+import cors from "cors";
 import express from "express";
 import { authRouter } from "./routes";
 import cookieSession from "cookie-session";
@@ -7,6 +8,7 @@ import { CustomHTTPError } from "./lib/utils";
 const app = express();
 
 app.set("trust proxy", true);
+app.use(cors());
 
 app.use(express.json());
 app.use(cookieSession({
