@@ -16,6 +16,14 @@ build:
         manual:
           - src: "src/**/*.{js,jsx,ts,tsx}"
             dest: .
+    - image: hanishdev/ticketing-tickets
+      context: tickets
+      docker:
+        dockerfile: tickets/Dockerfile
+      sync:
+        manual:
+          - src: "src/**/*.{js,jsx,ts,tsx}"
+            dest: .
     - image: hanishdev/ticketing-client
       context: client
       docker:
