@@ -1,15 +1,14 @@
 import "dotenv/config";
 import { app } from "./app";
 import mongoose from "mongoose";
-import { randomBytes } from "crypto";
 import { natsWrapper } from "./nats-wrapper";
 
 const connectNATS = async () => {
     try {
         await natsWrapper.connect(
-            "ticketing",
-            randomBytes(4).toString("hex"),
-            "http://nats-srv:4222"
+            process.env.NATS_CLUSTER_ID!,
+            process.env.NATS_CLIENT_ID!,
+            process.env.NATS_URL!
         );
         console.log('NATS connected successfully'); 
         natsWrapper.client.on("close", () => {
@@ -53,7 +52,7 @@ const gracefulShutdown = async (signal: NodeJS.Signals) => {
 };
 
 const startServer = async () => {
-    const keys = ['MONGO_URI','JWT_SECRET'];
+    const keys = ['NATS_CLUSTER_ID', 'NATS_CLIENT_ID', 'NATS_URL', 'MONGO_URI','JWT_SECRET'];
     for (const key of keys) {
         if (!process.env[key]) {
             throw new Error(`Missing environment variable ${key}`);
