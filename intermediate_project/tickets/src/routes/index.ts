@@ -5,11 +5,11 @@ import { getTicketByIdRouter } from "./get-ticket-by-id";
 import { getAllTicketsRouter } from "./get-all-tickets";
 import { updateTicketRouter } from "./update-ticket";
 
-const tickerRouter = Router();
+const ticketRouter = Router();
 
-tickerRouter.use(createTickerRouter);
-tickerRouter.use(updateTicketRouter);
-tickerRouter.use(getTicketByIdRouter);
-tickerRouter.use(getAllTicketsRouter);
+ticketRouter.use(createTickerRouter);
+ticketRouter.use(updateTicketRouter);
+ticketRouter.use(getTicketByIdRouter);
+ticketRouter.use(getAllTicketsRouter);
 
-export { tickerRouter };
+export { ticketRouter };

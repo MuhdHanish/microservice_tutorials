@@ -4,7 +4,7 @@ import {
     CustomHTTPError,
     errorHandler
 } from "@hanishdev-ticketing/common";
-import { tickerRouter } from "./routes";
+import { ticketRouter } from "./routes";
 import cookieSession from "cookie-session";
 
 const app = express();
@@ -17,7 +17,7 @@ app.use(cookieSession({
     secure: process.env.NODE_ENV !== "test",
 }));
 
-app.use("/api/tickets", authHandler, tickerRouter);
+app.use("/api/tickets", authHandler, ticketRouter);
 
 app.use("*", (req, res, next) => {
     errorHandler(new CustomHTTPError("Resource not found.", 404), req, res, next);
