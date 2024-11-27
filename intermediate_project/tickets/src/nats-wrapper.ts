@@ -11,7 +11,12 @@ class NatsWrapper {
     }
 
     connect(clusterID: string, clientID: string, url: string) { 
-        this._client = nats.connect(clusterID, clientID, { url });
+        this._client = nats.connect(clusterID, clientID, {
+            url,
+            reconnect: true,        
+            maxReconnectAttempts: 5,
+            reconnectTimeWait: 2000 
+         });
         return new Promise<void>((resolve, reject) => {
             this.client.on('connect', () => {
                 resolve();
