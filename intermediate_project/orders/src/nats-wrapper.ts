@@ -13,9 +13,9 @@ class NatsWrapper {
     connect(clusterID: string, clientID: string, url: string) { 
         this._client = nats.connect(clusterID, clientID, {
             url,
-            reconnect: true,         // Enable auto-reconnect
-            maxReconnectAttempts: 5, // Number of retry attempts
-            reconnectTimeWait: 2000  // Wait time between retries (ms)
+            reconnect: true,         
+            maxReconnectAttempts: 5,
+            reconnectTimeWait: 2000  
         });
         return new Promise<void>((resolve, reject) => {
             this.client.on('connect', () => {
