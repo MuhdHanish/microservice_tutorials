@@ -1,6 +1,7 @@
 import request from "supertest";
 import { app } from "../../app";
 import mongoose from "mongoose";
+import { natsWrapper } from "../../nats-wrapper";
 
 describe("update ticket", () => {
     it("has a route handler listening to /api/tickets/:id for put requests", async () => {
@@ -32,7 +33,7 @@ describe("update ticket", () => {
             .send({
                 title: "test",
                 price: 10,
-            });
+            }).expect(201);
         await request(app)
             .put(`/api/tickets/${createResponse.body.ticket.id}`)
             .set("Cookie", cookie)
@@ -82,7 +83,7 @@ describe("update ticket", () => {
             .send({
                 title: "test",
                 price: 10,
-            });
+            }).expect(201);
         const response = await request(app)
             .put(`/api/tickets/${createResponse.body.ticket.id}`)
             .set("Cookie", (global as any).authenticate())
@@ -101,7 +102,7 @@ describe("update ticket", () => {
             .send({
                 title: "test",
                 price: 10,
-            });
+            }).expect(201);
         const response = await request(app)
             .put(`/api/tickets/${createResponse.body.ticket.id}`)
             .set("Cookie", cookie)
@@ -113,5 +114,24 @@ describe("update ticket", () => {
         expect(response.body.ticket).toBeDefined();
         expect(response.body.ticket.title).toBe("test2");
         expect(response.body.ticket.price).toBe(20);
+    });
+
+    it("publishes an event", async () => {
+        const cookie = (global as any).authenticate();
+        const createResponse = await request(app)
+            .post("/api/tickets")
+            .set("Cookie", cookie)
+            .send({
+                title: "test",
+                price: 10,
+            }).expect(201);
+        await request(app)
+            .put(`/api/tickets/${createResponse.body.ticket.id}`)
+            .set("Cookie", cookie)
+            .send({
+                title: "test2",
+                price: 20,
+            }).expect(200);
+        expect(natsWrapper.client.publish).toHaveBeenCalled();
     });
 })
