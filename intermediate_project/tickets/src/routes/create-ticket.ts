@@ -5,6 +5,7 @@ import {
     validationHandler,
 } from "@hanishdev-ticketing/common";
 import { validateCreateTicket } from "../lib";
+import { natsWrapper } from "../nats-wrapper";
 import { NextFunction, Request, Response, Router } from "express";
 
 const router = Router();
@@ -20,7 +21,7 @@ router.post("/",
             const { id } = req.user!;
             const ticket = Ticket.build({ title, price, user: id });
             await ticket.save();
-            new TicketCreatedPublisher({} as any).publish({
+            new TicketCreatedPublisher(natsWrapper.client).publish({
                 id: ticket.id,
                 title: ticket.title,
                 price: ticket.price,
