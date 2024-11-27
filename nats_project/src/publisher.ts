@@ -25,7 +25,10 @@ stan.on("connect", () => {
     });
 
     stan.on("close", () => {
-        console.log("PublisherNATS connection closed!");
+        console.log("Publisher NATS connection closed!");
         process.exit();
     });
 })
+
+process.on("SIGINT", () => stan.close());
+process.on("SIGTERM", () => stan.close());
