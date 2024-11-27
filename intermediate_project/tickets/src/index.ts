@@ -9,12 +9,13 @@ const connectNATS = async () => {
         await natsWrapper.connect(
             "ticketing",
             randomBytes(4).toString("hex"),
-            "http://localhost:4222"
+            "http://nats-srv:4222"
         );
+        console.log('NATS connected successfully'); 
         natsWrapper.client.on("close", () => {
-            console.log("NATS connection closed!");
+            console.log("NATS connection closed");
             process.exit();
-        });
+        })
         process.on("SIGINT", () => natsWrapper.client.close());
         process.on("SIGTERM", () => natsWrapper.client.close());
     } catch (error) {
@@ -34,14 +35,19 @@ const connectDB = async () => {
     }
 };
 
-const handleExit = async (signal: NodeJS.Signals) => {
-    console.log(`Received ${signal}. Closing server gracefully...`);
+const gracefulShutdown = async (signal: NodeJS.Signals) => {
+    console.log(`Received ${signal}. Shutting down gracefully...`);
     try {
+        if (natsWrapper.client) {
+            console.log("Closing NATS connection...");
+            natsWrapper.client.close();
+        }
+        console.log("Closing MongoDB connection...");
         await mongoose.connection.close();
-        console.log("Database connection closed");
+        console.log("All connections closed. Exiting process.");
         process.exit(0);
     } catch (error) {
-        console.error("Database connection close error:", error);
+        console.error("Error during shutdown:", error);
         process.exit(1);
     }
 };
@@ -62,7 +68,7 @@ const startServer = async () => {
     });
 };
 
-process.on("SIGTERM", () => handleExit("SIGTERM"));
-process.on("SIGINT", () => handleExit("SIGINT"));
+process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+process.on("SIGINT", () => gracefulShutdown("SIGINT"));
 
 startServer();
