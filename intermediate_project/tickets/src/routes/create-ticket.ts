@@ -1,6 +1,7 @@
 import { Ticket } from "../models";
 import {
     CustomHTTPError,
+    TicketCreatedPublisher,
     validationHandler,
 } from "@hanishdev-ticketing/common";
 import { validateCreateTicket } from "../lib";
@@ -16,8 +17,15 @@ router.post("/",
             if (!title || !price) {
                 throw new CustomHTTPError("Title and price are required.", 400);
             }
-            const ticket = Ticket.build({ title, price, user: req.user!.id });
+            const { id } = req.user!;
+            const ticket = Ticket.build({ title, price, user: id });
             await ticket.save();
+            new TicketCreatedPublisher({} as any).publish({
+                id: ticket.id,
+                title: ticket.title,
+                price: ticket.price,
+                user: id
+            });
             res.status(201).send({ ticket});
         } catch (error: any) {
             next(error);
