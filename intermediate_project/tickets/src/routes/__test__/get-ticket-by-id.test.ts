@@ -1,6 +1,6 @@
 import request from "supertest";
 import { app } from "../../app";
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 describe("get ticket by id", () => { 
     it("returns a 401 or 403 if no token is provided or invalid", async () => {
