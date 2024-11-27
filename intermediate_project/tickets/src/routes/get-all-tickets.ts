@@ -1,5 +1,4 @@
 import { Ticket } from "../models";
-import { authHandler } from "@hanishdev-ticketing/common";
 import { NextFunction, Request, Response, Router } from "express";
 
 const router = Router();
