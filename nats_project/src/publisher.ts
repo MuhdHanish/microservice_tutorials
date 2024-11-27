@@ -1,5 +1,6 @@
 import nats from "node-nats-streaming";
 import { randomBytes } from "crypto";
+import { TicketCreatedPublisher } from "./events";
 
 console.clear();
 
@@ -13,16 +14,11 @@ const stan = nats.connect("ticketing", clientId, {
 stan.on("connect", () => {
     console.log(`Publisher ${clientId} connected to NATS`);
 
-    const data = JSON.stringify({
+   new TicketCreatedPublisher(stan).publish({
         id: "123",
         title: "concert",
         price: 20
-    });
-
-    stan.publish("ticket:created", data, () => {
-        console.log("Event ticket:created published");
-        stan.close();
-    });
+   });
 
     stan.on("close", () => {
         console.log("Publisher NATS connection closed!");
