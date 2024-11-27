@@ -13,9 +13,18 @@ const stan = nats.connect("ticketing", clientId, {
 stan.on("connect", () => {
     console.log(`Listener ${clientId} connected to NATS`);
 
-    const options = stan.subscriptionOptions()
-        .setManualAckMode(true);
-    const subscription = stan.subscribe("ticket:created", "ticket-created-queue-group", options);
+    const options = stan
+        .subscriptionOptions()
+        .setManualAckMode(true)
+        .setDeliverAllAvailable()
+        .setDurableName("accounting-service");
+    
+    const subscription = stan
+        .subscribe(
+            "ticket:created",
+            "ticket-created-queue-group",
+            options
+        );
 
     subscription.on("message", (msg: Message) => {
         console.log(`Received event: ${msg.getSubject()}`);
