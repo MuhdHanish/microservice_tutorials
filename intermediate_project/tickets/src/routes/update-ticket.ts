@@ -36,7 +36,7 @@ router.put("/:id",
                 title: existingTicket.title,
                 price: existingTicket.price,
                 user: existingTicket.user
-            })
+            });
             res.status(200).send({ ticket: existingTicket });
         } catch (error: any) {
             next(error);
