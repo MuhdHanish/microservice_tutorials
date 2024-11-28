@@ -1,9 +1,10 @@
 import request from "supertest";
 import { app } from "../../app";
 import mongoose from "mongoose";
+import { natsWrapper } from "../../nats-wrapper";
 import { OrderStatus } from "@hanishdev-ticketing/common";
 
-describe("delete order", () => { 
+describe("cancel order", () => { 
     it("has a route handler listening to /api/orders/:id for delete requests", async () => {
         const response = await request(app).patch("/api/orders/1").send({});
         expect(response.status).not.toEqual(404);
@@ -35,5 +36,15 @@ describe("delete order", () => {
         expect(response.status).toBe(200);
         expect(response.body.order).toBeDefined();
         expect(response.body.order.status).toBe(OrderStatus.Cancelled);
+    });
+
+    it("publishes an event", async () => {
+        const cookie = (global as any).authenticate();
+        const order = await (global as any).createOrder();
+        await request(app)
+            .patch(`/api/orders/${order._id}`)
+            .set("Cookie", cookie)
+            .send({});
+        expect(natsWrapper.client.publish).toHaveBeenCalled();
     });
 });

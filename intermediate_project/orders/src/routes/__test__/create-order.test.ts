@@ -1,6 +1,7 @@
 import supertest from "supertest";
 import { app } from "../../app";
 import mongoose from "mongoose";
+import { natsWrapper } from "../../nats-wrapper";
 
 describe("create order", () => {
     it("has a route handler listening to /api/orders for post requests", async () => {
@@ -59,5 +60,17 @@ describe("create order", () => {
         expect(response.status).toBe(201);
         expect(response.body.order).toBeDefined();
         expect(response.body.order.ticket).toBeDefined();
+    });
+
+    it("publishes an event", async () => {
+        const cookie = (global as any).authenticate();
+        const ticket = await (global as any).createTicket();
+        await supertest(app)
+            .post("/api/orders")
+            .set("Cookie", cookie)
+            .send({
+                ticket: ticket.id,
+            });
+        expect(natsWrapper.client.publish).toHaveBeenCalled();
     });
 })
