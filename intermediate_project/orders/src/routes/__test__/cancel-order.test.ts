@@ -1,6 +1,7 @@
 import request from "supertest";
 import { app } from "../../app";
 import mongoose from "mongoose";
+import { OrderStatus } from "@hanishdev-ticketing/common";
 
 describe("delete order", () => { 
     it("has a route handler listening to /api/orders/:id for delete requests", async () => {
@@ -32,5 +33,7 @@ describe("delete order", () => {
             .set("Cookie", cookie)
             .send({});
         expect(response.status).toBe(200);
+        expect(response.body.order).toBeDefined();
+        expect(response.body.order.status).toBe(OrderStatus.Cancelled);
     });
 });

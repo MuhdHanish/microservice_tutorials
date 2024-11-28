@@ -18,11 +18,15 @@ router.patch("/:id",
                 throw new CustomHTTPError("ID is required.", 400);
             }
             const user = req.user!;
-            const order = await Order.findByIdAndUpdate({ _id: id, user: user.id, status: { $ne: "cancelled" } }, { status: OrderStatus.Cancelled });
+            const order = await Order.findByIdAndUpdate(
+                { _id: id, user: user.id },
+                { status: OrderStatus.Cancelled },
+                { new: true }
+            );
             if (!order) {
-                throw new CustomHTTPError("Order not found with provided ID and user.", 404);
+                throw new CustomHTTPError("Order not found with provided ID and user", 404);
             }
-            res.sendStatus(200);
+            res.status(200).send({ order });
         } catch (error) {
             next(error);
         }
