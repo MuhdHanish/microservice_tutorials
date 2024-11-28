@@ -6,6 +6,8 @@ import {
 import { validParamId } from "../lib";
 import { Request, Response, NextFunction, Router } from "express";
 import { Order } from "../models";
+import { OrderCancelledPublisher } from "../events";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = Router();
 
@@ -18,14 +20,18 @@ router.patch("/:id",
                 throw new CustomHTTPError("ID is required.", 400);
             }
             const user = req.user!;
-            const order = await Order.findByIdAndUpdate(
-                { _id: id, user: user.id },
-                { status: OrderStatus.Cancelled },
-                { new: true }
-            );
+            const order = await Order.findOne({ _id: id, user: user.id });
             if (!order) {
                 throw new CustomHTTPError("Order not found with provided ID and user", 404);
             }
+            order.status = OrderStatus.Cancelled;
+            await order.save();
+            new OrderCancelledPublisher(natsWrapper.client).publish({
+                id: order.id,
+                ticket: {
+                    id: order.ticket.id
+                }
+            });
             res.status(200).send({ order });
         } catch (error) {
             next(error);

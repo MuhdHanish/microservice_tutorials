@@ -5,6 +5,8 @@ import {
 } from "@hanishdev-ticketing/common";
 import { Order, Ticket } from "../models";
 import { validateCreateOrder } from "../lib";
+import { natsWrapper } from "../nats-wrapper";
+import { OrderCreatedPublisher } from "../events";
 import { NextFunction, Request, Response, Router } from "express";
 
 const router = Router();
@@ -37,6 +39,16 @@ router.post("/",
                 ticket
             })
             await order.save();
+            new OrderCreatedPublisher(natsWrapper.client).publish({
+                id: order.id,
+                status: order.status,
+                expiresAt: order.expiresAt.toISOString(),
+                user: order.user,
+                ticket: {
+                    id: existingTicket.id,
+                    price: existingTicket.price
+                }
+            });
             res.status(201).send({ order });
         } catch (error: any) {
             next(error);
