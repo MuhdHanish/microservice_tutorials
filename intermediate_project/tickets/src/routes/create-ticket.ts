@@ -1,11 +1,11 @@
 import { Ticket } from "../models";
 import {
     CustomHTTPError,
-    TicketCreatedPublisher,
     validationHandler,
 } from "@hanishdev-ticketing/common";
 import { validateCreateTicket } from "../lib";
 import { natsWrapper } from "../nats-wrapper";
+import { TicketCreatedPublisher } from "../events";
 import { NextFunction, Request, Response, Router } from "express";
 
 const router = Router();
