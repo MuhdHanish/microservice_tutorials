@@ -10,11 +10,13 @@ interface ITicketAttrs {
 export interface ITicket extends mongoose.Document {
     title: string;
     price: number;
+    version: number;
     isReserved: () => Promise<boolean>;
 }
 
 interface ITicketModel extends mongoose.Model<ITicket> {
     build(attrs: ITicketAttrs): ITicket;
+    findByIdAndVersion(event: { id: string; version: number }): Promise<ITicket | null>;
 }
 
 const ticketSchema = new mongoose.Schema<ITicket, ITicketModel>(
@@ -40,6 +42,13 @@ const ticketSchema = new mongoose.Schema<ITicket, ITicketModel>(
     }
 );
 
+ticketSchema.set("versionKey", "version");
+ticketSchema.pre("save", function (next) {
+    this.$where = {
+        version: this.get("version") - 1
+    };
+    next();
+})
 
 ticketSchema.methods.isReserved = async function () {
     return !!await Order.findOne({
@@ -60,6 +69,13 @@ ticketSchema.statics.build = (attrs: ITicketAttrs) => {
         ...(id && { _id: id }),
         ...rest
     });
+};
+
+ticketSchema.statics.findByIdAndVersion = (event: {
+    id: string;
+    version: number;
+}): Promise<ITicket | null> => {
+    return Ticket.findOne({ _id: event.id, version: event.version - 1 });
 };
 
 const Ticket = mongoose.model<ITicket, ITicketModel>("Ticket", ticketSchema);
