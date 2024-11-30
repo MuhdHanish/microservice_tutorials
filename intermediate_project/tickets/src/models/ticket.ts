@@ -12,6 +12,7 @@ interface ITicket extends mongoose.Document {
     price: number;
     user: string;
     version: number;
+    order?: string;
 }
 
 interface ITicketModel extends mongoose.Model<ITicket> {
@@ -32,6 +33,9 @@ const ticketSchema = new mongoose.Schema<ITicket, ITicketModel>(
             type: String,
             required: true,
         },
+        order: {
+            type: String,
+        }
     },
     {
         timestamps: true,
