@@ -25,9 +25,10 @@ router.post("/",
                 id: ticket.id,
                 title: ticket.title,
                 price: ticket.price,
+                version: ticket.version,
                 user: id
             });
-            res.status(201).send({ ticket});
+            res.status(201).send({ ticket });
         } catch (error: any) {
             next(error);
         }
