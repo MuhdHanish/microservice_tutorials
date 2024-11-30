@@ -35,6 +35,7 @@ router.put("/:id",
                 id: existingTicket.id,
                 title: existingTicket.title,
                 price: existingTicket.price,
+                version: existingTicket.version,
                 user: existingTicket.user
             });
             res.status(200).send({ ticket: existingTicket });
