@@ -44,6 +44,7 @@ router.post("/",
                 status: order.status,
                 expiresAt: order.expiresAt.toISOString(),
                 user: order.user,
+                version: order.version,
                 ticket: {
                     id: existingTicket.id,
                     price: existingTicket.price
