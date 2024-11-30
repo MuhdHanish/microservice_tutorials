@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 interface ITicketAttrs {
     title: string;
@@ -10,6 +11,7 @@ interface ITicket extends mongoose.Document {
     title: string;
     price: number;
     user: string;
+    version: number;
 }
 
 interface ITicketModel extends mongoose.Model<ITicket> {
@@ -42,6 +44,9 @@ const ticketSchema = new mongoose.Schema<ITicket, ITicketModel>(
         },
     }
 );
+
+ticketSchema.set("versionKey", "version");
+ticketSchema.plugin(updateIfCurrentPlugin as any);
 
 ticketSchema.statics.build = (attrs: ITicketAttrs) => {
     return new Ticket(attrs);
