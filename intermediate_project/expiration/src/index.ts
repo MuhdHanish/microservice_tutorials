@@ -1,5 +1,6 @@
 import "dotenv/config";
 import { natsWrapper } from "./nats-wrapper";
+import { OrderCreatedListener } from "./events/listeners/order-created-listener";
 
 const connectNATS = async () => {
     try {
@@ -13,6 +14,8 @@ const connectNATS = async () => {
             console.log("NATS connection closed");
             process.exit();
         });
+
+        new OrderCreatedListener(natsWrapper.client).listen();
 
         process.on("SIGINT", () => natsWrapper.client.close());
         process.on("SIGTERM", () => natsWrapper.client.close());
@@ -29,6 +32,7 @@ const gracefulShutdown = async (signal: NodeJS.Signals) => {
             console.log("Closing NATS connection...");
             natsWrapper.client.close();
         }
+
         console.log("All connections closed. Exiting process.");
         process.exit(0);
     } catch (error) {
@@ -38,7 +42,7 @@ const gracefulShutdown = async (signal: NodeJS.Signals) => {
 };
 
 const startServer = async () => {
-    const keys = ['NATS_CLUSTER_ID', 'NATS_CLIENT_ID', 'NATS_URL'];
+    const keys = ['NATS_CLUSTER_ID', 'NATS_CLIENT_ID', 'NATS_URL', 'REDIS_HOST'];
     for (const key of keys) {
         if (!process.env[key]) {
             throw new Error(`Missing environment variable ${key}`);
