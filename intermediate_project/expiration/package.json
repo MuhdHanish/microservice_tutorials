@@ -28,6 +28,7 @@
   "dependencies": {
     "@hanishdev-ticketing/common": "^1.0.14",
     "bull": "^4.16.4",
+    "dotenv": "^16.4.5",
     "node-nats-streaming": "^0.3.2"
   }
 }
