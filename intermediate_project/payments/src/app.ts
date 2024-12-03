@@ -16,7 +16,7 @@ app.use(cookieSession({
     secure: process.env.NODE_ENV !== "test",
 }));
 
-app.use("/api/tickets", authHandler, (req, res) => {
+app.use("/api/payments", authHandler, (req, res) => {
     res.send({}); 
 });
 
