@@ -2,6 +2,7 @@ import "dotenv/config";
 import { app } from "./app";
 import mongoose from "mongoose";
 import { natsWrapper } from "./nats-wrapper";
+import { OrderCancelledListener, OrderCreatedListener } from "./events";
 
 const connectNATS = async () => {
     try {
@@ -15,6 +16,9 @@ const connectNATS = async () => {
             console.log("NATS connection closed");
             process.exit();
         });
+
+        new OrderCreatedListener(natsWrapper.client).listen();
+        new OrderCancelledListener(natsWrapper.client).listen();
 
         process.on("SIGINT", () => natsWrapper.client.close());
         process.on("SIGTERM", () => natsWrapper.client.close());
