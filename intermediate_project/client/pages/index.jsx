@@ -17,33 +17,24 @@ Home.getInitialProps = async (context, user) => {
     }
 };
 
-export default function Home({ user, tickets }) {
-    const { loading, makeRequest } = useRequest(
-        "/api/auth/signout",
-        "post",
-    );
-    const logout = async () => {
-        await makeRequest(() => {
-            window.location.href = "/";
-        });
-    }
+export default function Home({ tickets }) {
     return (
-        <div className="container d-flex justify-content-center align-items-center vh-100 flex-column gap-5">
-            <h3>{"Welcome " + (user ? user.email : "Guest")}</h3>
-            {!user ?
-                <div className="d-flex gap-3 align-items-center">
-                    <Link href="/auth/signin" className="btn btn-primary">Sign In</Link>
-                    <Link href="/auth/signup" className="btn btn-primary">Sign Up</Link>
-                </div>
-                : <button
-                    onClick={logout}
-                    type="button"
-                    disabled={loading}
-                    className="btn btn-danger"
-                >
-                    Sign Out
-                </button>
-            }
+        <div className="container d-flex flex-column py-5">
+            <h3 className="fw-bold text-uppercase">Tickets</h3>
+            <hr />
+            <div className="d-flex flex-row flex-wrap gap-3">
+                {
+                    tickets?.map((ticket, index) => (
+                        <div className="card col-12 col-lg-3" key={`${ticket?.id}-${index}`}>
+                            <div className="card-body">
+                                <h3 className="card-title fw-bold">{ticket?.title}</h3>
+                                <p className="card-text fs-4 fw-bold">₹{ticket?.price}</p>
+                                <Link href={`/tickets/${ticket?.id}`} className="text-primary text-decoration-none text-uppercase h6">View</Link>
+                            </div>
+                        </div>
+                    ))
+                }
+            </div>
         </div>
     );
 }
