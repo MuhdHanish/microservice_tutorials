@@ -22,17 +22,17 @@ export const Navbar = ({ user }) => {
                       <button
                           disabled={loading}
                           type="button"
-                          className="btn btn-outline-danger"
+                          className="text-danger outline-none border-0 bg-transparent" 
                           onClick={onSignOut}
                       >
                           Sign Out
                       </button>
                   ) : (
                       <>
-                          <Link href="/auth/signin" className="btn btn-outline-primary me-2">
+                          <Link href="/auth/signin" className="text-primary text-decoration-none me-3">
                               Sign In
                           </Link>
-                          <Link href="/auth/signup" className="btn btn-primary">
+                              <Link href="/auth/signup" className="text-primary text-decoration-none">
                               Sign Up
                           </Link>
                       </>
