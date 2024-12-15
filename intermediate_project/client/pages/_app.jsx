@@ -16,7 +16,7 @@ App.getInitialProps = async (context) => {
         const { data } = await axiosInstace(context.ctx).get("/api/auth/currentuser");
         let pageProps = {};
         if (context.Component.getInitialProps) {
-            pageProps = await context.Component.getInitialProps(context.ctx, data.user);
+            pageProps = await context.Component.getInitialProps(context, data.user);
         }
         return {
             pageProps,
