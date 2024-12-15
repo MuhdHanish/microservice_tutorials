@@ -2,6 +2,8 @@ import { CustomHTTPError, OrderStatus, validationHandler } from "@hanishdev-tick
 import { Request, Response, Router, NextFunction } from "express";
 import { validateCreatePayment, stripe } from "../lib";
 import { Order, Payment } from "../models";
+import { PaymentCreatedPublisher } from "../events/publishers";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = Router();
 
@@ -40,6 +42,12 @@ router.post("/",
                 stripe: paymentIntent.id
             });
             await payment.save();
+
+            new PaymentCreatedPublisher(natsWrapper.client).publish({
+                id: payment.id,
+                order: payment.order,
+                stripe: payment.stripe
+            });
 
             res.status(201).send({ message: "Payment created successfully." });
         } catch (error) {
