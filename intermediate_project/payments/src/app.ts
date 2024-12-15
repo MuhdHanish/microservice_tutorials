@@ -5,6 +5,7 @@ import {
     errorHandler
 } from "@hanishdev-ticketing/common";
 import cookieSession from "cookie-session";
+import { paymentRouter } from "./routes";
 
 const app = express();
 
@@ -16,9 +17,7 @@ app.use(cookieSession({
     secure: process.env.NODE_ENV !== "test",
 }));
 
-app.use("/api/payments", authHandler, (req, res) => {
-    res.send({}); 
-});
+app.use("/api/payments", authHandler, paymentRouter);
 
 app.use("*", (req, res, next) => {
     errorHandler(new CustomHTTPError("Resource not found.", 404), req, res, next);
