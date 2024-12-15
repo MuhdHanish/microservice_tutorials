@@ -6,14 +6,16 @@ config({ path: path.resolve(__dirname, "../../.env.test.local") });
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-import { Order, OrderStatus } from "../models";
+import { Order, OrderStatus, IOrder } from "../models";
 
 jest.mock("../nats-wrapper.ts");
+jest.mock("../lib");
 
 declare global {
     namespace NodeJS {
         interface Global {
-            authenticate(): string[];
+            authenticate(userId?: string): string[];
+            createOrder(user?: string): Promise<IOrder>;
         }
     }
 }
@@ -48,7 +50,7 @@ afterAll(async () => {
     return cookie;
 };
 
-(global as any).createOrder = async (user?: string) => {
+(global as any).createOrder = async (user?: string): Promise<IOrder> => {
     const order = Order.build({
         id: new mongoose.Types.ObjectId().toHexString(),
         price: 10,
