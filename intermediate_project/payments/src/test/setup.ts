@@ -6,6 +6,7 @@ config({ path: path.resolve(__dirname, "../../.env.test.local") });
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
+import { Order, OrderStatus } from "../models";
 
 jest.mock("../nats-wrapper.ts");
 
@@ -33,8 +34,8 @@ afterAll(async () => {
     await mongoose.connection.close();
 });
 
-(global as any).authenticate = () => {
-    const id = new mongoose.Types.ObjectId().toHexString();
+(global as any).authenticate = (userId?: string) => {
+    const id = userId || new mongoose.Types.ObjectId().toHexString();
     const email = "jhondoe@example.com";
     const token = jwt.sign({
         id,
@@ -45,4 +46,16 @@ afterAll(async () => {
     const base64 = Buffer.from(sessionJSON).toString("base64");
     const cookie = [`session=${base64}=;path=/;httponly`];
     return cookie;
+};
+
+(global as any).createOrder = async (user?: string) => {
+    const order = Order.build({
+        id: new mongoose.Types.ObjectId().toHexString(),
+        price: 10,
+        version: 0,
+        status: OrderStatus.Created,
+        user: user || new mongoose.Types.ObjectId().toHexString(),
+    });
+    await order.save();
+    return order;
 };
