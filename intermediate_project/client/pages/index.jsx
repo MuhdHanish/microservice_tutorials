@@ -1,13 +1,23 @@
 import Link from "next/link";
 import { useRequest } from "../hooks";
+import { axiosInstace } from "../lib/api/config";
 
-Home.getInitialProps = async (_context, user) => {
-    return {
-        user
-    };
+Home.getInitialProps = async (context, user) => {
+    try {
+        const { data } = await axiosInstace(context.ctx).get("/api/tickets");
+        return {
+            tickets: data.tickets || [],
+            user
+        };
+    } catch (error) {
+        return {
+            tickets: [],
+            user,
+        }
+    }
 };
 
-export default function Home({ user }) {
+export default function Home({ user, tickets }) {
     const { loading, makeRequest } = useRequest(
         "/api/auth/signout",
         "post",
