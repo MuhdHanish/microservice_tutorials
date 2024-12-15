@@ -6,7 +6,7 @@ export default function App({ Component, pageProps, user }) {
     return (
         <div>
             <Navbar user={user} />
-            <Component {...pageProps} />
+            <Component user={user} {...pageProps} />
         </div>
     );
 }
@@ -16,7 +16,7 @@ App.getInitialProps = async (context) => {
         const { data } = await axiosInstace(context.ctx).get("/api/auth/currentuser");
         let pageProps = {};
         if (context.Component.getInitialProps) {
-            pageProps = await context.Component.getInitialProps(context.ctx);
+            pageProps = await context.Component.getInitialProps(context.ctx, data.user);
         }
         return {
             pageProps,
