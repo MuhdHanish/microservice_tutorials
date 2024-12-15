@@ -28,7 +28,7 @@ router.post("/",
                 throw new CustomHTTPError("Cannot create payment for cancelled order.", 400);
             }
 
-            const paymentIntent = await stripe.paymentIntents.create({
+            await stripe.paymentIntents.create({
                 amount: order.price * 100,
                 currency: 'usd',
                 payment_method: 'pm_card_visa',
