@@ -12,27 +12,27 @@ export const Navbar = ({ user }) => {
         });
     }
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top rounded-2 m-2 px-2">
             <div className="container-fluid">
-                <Link href="/" className="navbar-brand">
+                <Link href="/" className="navbar-brand text-uppercase fw-bold">
                     Ticketing
                 </Link>
-                <div className="d-flex">
+                <div className="d-flex align-items-center">
                     {user ? (
                         <button
                             disabled={loading}
                             type="button"
-                            className="text-danger outline-none border-0 bg-transparent"
+                            className="text-danger outline-none border-0 bg-transparent text-uppercase fw-bold"
                             onClick={onSignOut}
                         >
                             Sign Out
                         </button>
                     ) : (
                         <>
-                            <Link href="/auth/signin" className="text-primary text-decoration-none me-3">
+                            <Link href="/auth/signin" className="text-primary text-decoration-none me-3 text-uppercase fw-bold">
                                 Sign In
                             </Link>
-                            <Link href="/auth/signup" className="text-primary text-decoration-none">
+                            <Link href="/auth/signup" className="text-primary text-decoration-none text-uppercase fw-bold">
                                 Sign Up
                             </Link>
                         </>

@@ -6,7 +6,9 @@ export default function App({ Component, pageProps, user }) {
     return (
         <div>
             <Navbar user={user} />
-            <Component user={user} {...pageProps} />
+            <div className="mt-5 pt-2">
+                <Component user={user} {...pageProps} />
+            </div>
         </div>
     );
 }
