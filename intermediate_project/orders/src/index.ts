@@ -2,7 +2,12 @@ import "dotenv/config";
 import { app } from "./app";
 import mongoose from "mongoose";
 import { natsWrapper } from "./nats-wrapper";
-import { ExpirationCompleteListener, TicketCreatedListener, TicketUpdatedListener } from "./events";
+import {
+    ExpirationCompleteListener,
+    PaymentCreatedListener,
+    TicketCreatedListener,
+    TicketUpdatedListener
+} from "./events";
 
 const connectNATS = async () => {
     try {
@@ -20,6 +25,7 @@ const connectNATS = async () => {
         new TicketCreatedListener(natsWrapper.client).listen();
         new TicketUpdatedListener(natsWrapper.client).listen();
         new ExpirationCompleteListener(natsWrapper.client).listen();
+        new PaymentCreatedListener(natsWrapper.client).listen();    
 
         process.on("SIGINT", () => natsWrapper.client.close());
         process.on("SIGTERM", () => natsWrapper.client.close());
