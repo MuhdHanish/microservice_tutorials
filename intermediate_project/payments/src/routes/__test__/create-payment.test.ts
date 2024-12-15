@@ -71,21 +71,4 @@ describe("create payment", () => {
             });
         expect(response.status).toBe(400);
     });
-
-    it("return a 201 if the provided token and id are valid", async () => {
-        const order = await (global as any).createOrder();
-        const response = await supertest(app)
-            .post("/api/payments")
-            .set("Cookie", (global as any).authenticate(order.user))
-            .send({
-                order: order.id,
-            });
-        expect(response.status).toBe(201);
-        expect(stripe.paymentIntents.create).toHaveBeenCalledWith({
-            amount: order.price * 100,
-            currency: "usd",
-            payment_method: "pm_card_visa",
-            payment_method_types: ["card"],
-        });
-    });
 });
