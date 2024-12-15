@@ -1,7 +1,7 @@
 import { CustomHTTPError, OrderStatus, validationHandler } from "@hanishdev-ticketing/common";
 import { Request, Response, Router, NextFunction } from "express";
 import { validateCreatePayment, stripe } from "../lib";
-import { Order } from "../models";
+import { Order, Payment } from "../models";
 
 const router = Router();
 
@@ -28,12 +28,18 @@ router.post("/",
                 throw new CustomHTTPError("Cannot create payment for cancelled order.", 400);
             }
 
-            await stripe.paymentIntents.create({
+            const paymentIntent = await stripe.paymentIntents.create({
                 amount: order.price * 100,
                 currency: 'usd',
                 payment_method: 'pm_card_visa',
                 payment_method_types: ['card'],
             });
+
+            const payment = Payment.build({
+                order: order.id,
+                stripe: paymentIntent.id
+            });
+            await payment.save();
 
             res.status(201).send({ message: "Payment created successfully." });
         } catch (error) {
