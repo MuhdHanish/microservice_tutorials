@@ -1,14 +1,17 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useRequest } from "../hooks";
 
 export const Navbar = ({ user }) => {
+    const router = useRouter();
+
     const { loading, makeRequest } = useRequest(
         "/api/auth/signout",
         "post",
     );
     const onSignOut = async () => {
         await makeRequest(() => {
-            window.location.href = "/";
+            router.push("/");
         });
     }
     return (
