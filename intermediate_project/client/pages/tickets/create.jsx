@@ -34,7 +34,7 @@ export default function Create() {
         <div className="container d-flex justify-content-center align-items-center vh-100">
             <form
                 onSubmit={handleSubmit}
-                className="col-12 col-md-6 border mx-auto my-5 mb-5 p-5 shadow bg-body rounded d-flex flex-column gap-3"
+                className="col-12 col-md-8 col-lg-6 border mx-auto my-5 mb-5 p-5 shadow bg-body rounded d-flex flex-column gap-3"
             >
                 <h2>Create Ticket</h2>
                 <div className="form-group">
