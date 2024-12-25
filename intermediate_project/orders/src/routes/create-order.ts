@@ -11,7 +11,7 @@ import { NextFunction, Request, Response, Router } from "express";
 
 const router = Router();
 
-const  EXPERRARION_WINDOW_SECONDS = 15 * 60;
+const  EXPERRARION_WINDOW_SECONDS = 60;
 
 router.post("/",
     validationHandler(validateCreateOrder),
