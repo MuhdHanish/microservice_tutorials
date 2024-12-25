@@ -9,7 +9,7 @@ export default function Ticket({ ticket }) {
     const { loading, error, makeRequest } = useRequest(API_URL, "post", { ticket: ticket?.id });
     const handlePurchase = async () => {
         await makeRequest((data) => {
-            if (data.order) { 
+            if (data && data?.order) { 
                 router.push(`/orders/${data.order.id}`);
             }
         });  
