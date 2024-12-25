@@ -16,12 +16,15 @@ Home.getInitialProps = async (context, user) => {
     }
 };
 
-export default function Home({ tickets }) {
+export default function Home({ tickets, user }) {
     return (
         <div className="container d-flex flex-column py-5">
             <div className="d-flex justify-content-between align-items-center">
                 <h3 className="fw-bold text-uppercase">Tickets</h3>
-                <Link href="/tickets/create" className="text-primary fw-bold text-decoration-none text-uppercase h6">Create</Link>
+                {user ?
+                    <Link href="/tickets/create" className="text-primary fw-bold text-decoration-none text-uppercase h6">Create</Link> :
+                    <Link href="/auth/signin" className="text-primary fw-bold text-decoration-none text-uppercase h6">Sign in</Link>
+                }
             </div>
             <hr />
             <div className="d-flex flex-row flex-wrap gap-3">
