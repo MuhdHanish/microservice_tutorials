@@ -8,7 +8,7 @@ export class OrderCancelledListener extends Listener<OrderCancelledEvent> {
     readonly subject = Subjects.OrderCancelled;
     queueGroupName = ORDERS_LISTENER_QUEUE_GROUP;
 
-    async onMessage(data: OrderCancelledEvent["data"], msg: Message) {
+    async onMessage(data: OrderCancelledEvent["data"], msg: Message) {        
         const ticket = await Ticket.findById(data.ticket.id);
 
         if (!ticket) {

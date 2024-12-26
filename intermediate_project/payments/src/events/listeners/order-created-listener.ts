@@ -11,7 +11,7 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent>{
         const { ticket, ...rest } = data;
         const order = Order.build({
             price: ticket.price,
-            ...rest
+            ...rest,
         });
         await order.save();
         
