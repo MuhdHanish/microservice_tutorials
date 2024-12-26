@@ -11,7 +11,7 @@ import { natsWrapper } from "../nats-wrapper";
 
 const router = Router();
 
-router.patch("/:id",
+router.patch("/:id/cancel",
     validationHandler(validParamId),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
@@ -27,10 +27,10 @@ router.patch("/:id",
             order.status = OrderStatus.Cancelled;
             await order.save();
             new OrderCancelledPublisher(natsWrapper.client).publish({
-                id: order.id,
+                id: order._id as string,
                 version: order.version,
                 ticket: {
-                    id: order.ticket.id
+                    id: order.ticket._id as string
                 }
             });
             res.status(200).send({ order });
