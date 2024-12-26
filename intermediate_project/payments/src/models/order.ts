@@ -55,7 +55,7 @@ orderSchema.plugin(updateIfCurrentPlugin as any);
 orderSchema.statics.build = (attrs: IOrderAttrs) => {
     const { id, ...rest } = attrs;
     return new Order({
-        ...(id && { _id: id }),
+        ...(id && { _id: new mongoose.Types.ObjectId(id) }),
         ...rest,
     });
 };

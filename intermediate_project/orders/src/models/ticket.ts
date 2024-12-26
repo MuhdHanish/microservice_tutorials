@@ -66,7 +66,7 @@ ticketSchema.methods.isReserved = async function () {
 ticketSchema.statics.build = (attrs: ITicketAttrs) => {
     const { id, ...rest } = attrs;
     return new Ticket({
-        ...(id && { _id: id }),
+        ...(id && { _id: new mongoose.Types.ObjectId(id) }),
         ...rest
     });
 };
