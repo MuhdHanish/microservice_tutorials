@@ -6,7 +6,9 @@ const router = Router();
 router.get("/",
     async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const tickets = await Ticket.find({});
+            const tickets = await Ticket.find({
+                order: undefined
+            });
             res.status(200).send({ tickets });
         } catch (error: any) {
             next(error);
