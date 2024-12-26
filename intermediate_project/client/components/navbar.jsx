@@ -22,14 +22,22 @@ export const Navbar = ({ user }) => {
                 </Link>
                 <div className="d-flex align-items-center">
                     {user ? (
-                        <button
-                            disabled={loading}
-                            type="button"
-                            className="text-danger outline-none border-0 bg-transparent text-uppercase fw-bold"
-                            onClick={onSignOut}
-                        >
-                            Sign Out
-                        </button>
+                        <>
+                            <Link href="/orders" className="text-primary text-decoration-none me-3 text-uppercase fw-bold">
+                                My Orders
+                            </Link>
+                            <Link href="/tickets/create" className="text-primary text-decoration-none me-3 text-uppercase fw-bold">
+                                Create Ticket
+                            </Link>
+                            <button
+                                disabled={loading}
+                                type="button"
+                                className="text-danger outline-none border-0 bg-transparent text-uppercase fw-bold"
+                                onClick={onSignOut}
+                            >
+                                Sign Out
+                            </button>
+                        </>
                     ) : (
                         <>
                             <Link href="/auth/signin" className="text-primary text-decoration-none me-3 text-uppercase fw-bold">
